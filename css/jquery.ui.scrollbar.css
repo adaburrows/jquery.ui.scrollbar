@@ -1,0 +1,51 @@
+.scroll-pane .ui-state-default,
+.scroll-pane .ui-widget-content .ui-state-default,
+.scroll-pane .ui-widget-header .ui-state-default {
+    border: none;
+    background: #dedede none;
+}
+.scroll-pane .ui-state-hover,
+.scroll-pane .ui-widget-content .ui-state-hover,
+.scroll-pane .ui-widget-header .ui-state-hover,
+.scroll-pane .ui-state-focus,
+.scroll-pane .ui-widget-content .ui-state-focus,
+.scroll-pane .ui-widget-header .ui-state-focus {
+    border: none;
+    background: #fff none;
+    cursor:  pointer;
+}
+.scroll-pane .ui-state-active,
+.scroll-pane .ui-widget-content .ui-state-active,
+.scroll-pane .ui-widget-header .ui-state-active {
+    border: none;
+    background: #fff none;
+}
+
+.scroll-pane .ui-slider { position: relative; text-align: left; }
+.scroll-pane .ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 10px; height: 24px; cursor: default; }
+.scroll-pane .ui-slider-vertical { width: 10px; height: 100%; }
+.scroll-pane .ui-slider-vertical .ui-slider-handle { left: 0; margin-left: 0; margin-bottom: 0px; }
+.scroll-bar-wrap-vertical {
+    padding: 0;
+    margin: 0;
+    width: 10px;
+    height: 99%;
+    float: right;
+    background: #B1B1B1;
+    border: 1px solid #808080;
+}
+
+.scroll-pane-vertical { height: 100%; width: 100%; }
+.scroll-content-vertical { overflow: hidden; width: 180px; height: auto; float: left; }
+.scroll-bar-wrap-vertical .ui-slider { background: none; border:0; height: 100%; width: 10px; margin: 0;  }
+.scroll-bar-wrap-vertical .ui-handle-helper-parent { position: relative; width: 10px; height: 100%; margin: 0 auto; }
+.scroll-bar-wrap-vertical .ui-slider-handle { left:0em; width: 10px; background: #fff }
+.scroll-bar-wrap-vertical .ui-slider-handle .ui-icon { margin:  0; position: relative; left: 50%; }
+
+.scroll-pane-horizontal { overflow: none; width: 250px; }
+.scroll-content-horizontal { width: 1220px; float: left; }
+.scroll-bar-wrap-horizontal { clear: left; padding: 0 4px 0 2px; margin: 0 -1px -1px -1px; }
+.scroll-bar-wrap-horizontal .ui-slider { background: none; border:0; height: 2em; margin: 0 auto;  }
+.scroll-bar-wrap-horizontal .ui-handle-helper-parent { position: relative; width: 100%; height: 100%; margin: 0 auto; }
+.scroll-bar-wrap-horizontal .ui-slider-handle { top:.2em; height: 1.5em; }
+.scroll-bar-wrap-horizontal .ui-slider-handle .ui-icon { margin: -8px auto 0; position: relative; top: 50%; }

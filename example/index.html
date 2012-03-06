@@ -1,0 +1,72 @@
+<html>
+<head>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+<link rel="stylesheet" href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/jquery.ui.scrollbar.css" type="text/css" media="all" />
+<style>
+div.demo { float: left; }
+.scroll-content-item { width: 100%; height: 50px; float: left; margin: 10px; font-size: 3em; line-height: 48px; text-align: center; }
+* html .scroll-content-item { display: inline; } /* IE6 float double margin bug */
+body { background: #000; color: #dedede }
+
+.scroll-pane {
+    width: 250px;
+    height: 400px;
+    overflow: hidden;
+}
+</style>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="../js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="../js/jquery-ui-1.8.9.min.js"></script>
+<script type="text/javascript" src="../js/jquery.ui.scrollbar.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+  $(".scroll-pane").scrollbar({orientation: 'vertical'});
+});
+</script>
+</head>
+<body>
+<div class="demo" style="margin: 20px;">
+
+<div class="scroll-pane">
+	<div class="scroll-content-item ui-widget-header">1</div>
+	<div class="scroll-content-item ui-widget-header">2</div>
+	<div class="scroll-content-item ui-widget-header">3</div>
+	<div class="scroll-content-item ui-widget-header">4</div>
+	<div class="scroll-content-item ui-widget-header">5</div>
+	<div class="scroll-content-item ui-widget-header">6</div>
+	<div class="scroll-content-item ui-widget-header">7</div>
+	<div class="scroll-content-item ui-widget-header">8</div>
+	<div class="scroll-content-item ui-widget-header">9</div>
+	<div class="scroll-content-item ui-widget-header">10</div>
+</div>
+
+</div><!-- End demo -->
+
+<div class="demo-description" style="margin: 20px; margin-left: 300px;">
+<p>The plugin is really easy to use:</p>
+<pre><code>
+$(document).ready(function()
+{
+  $(".scroll-pane").scrollbar({orientation: 'vertical'});
+});
+</code></pre>
+<p>The HTML used for it is:</p>
+<pre><code>
+&lt;div class="scroll-pane"&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;1&lt;/div&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;2&lt;/div&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;3&lt;/div&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;4&lt;/div&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;5&lt;/div&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;6&lt;/div&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;7&lt;/div&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;8&lt;/div&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;9&lt;/div&gt;
+        &lt;div class="scroll-content-item ui-widget-header"&gt;10&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+</div><!-- End demo-description -->
+</body>
+</html>

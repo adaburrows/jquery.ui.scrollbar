@@ -115,7 +115,7 @@
 		},
 		_mousewheelHandler: function (event, delta) {
 			var scrollScreen = false;
-			var duration = (delta + 1) * this.options.animationDuration;
+			var duration = this.options.animationDuration;
 			var scrollAmount = delta * this.options.scrollFactor;
 			if(this.options.orientation == "horizontal") {
 				var scrollbarValue = parseInt(this.scrollbar.slider('value')) - scrollAmount;
@@ -153,7 +153,7 @@
 					{
 						"margin-left":  + "px"
 					}, {
-						duration: duration,
+						duration: duration/distance,
 						easing: this.options.easing
 					});
 			} else {
@@ -169,7 +169,7 @@
 					{
 						"margin-top": distance + "px"
 					}, {
-						duration: duration,
+						duration: duration/distance,
 						easing: this.options.easing
 					});
 			} else {
@@ -186,6 +186,7 @@
 				// Set the active value to true so we know we've attached the scrollbar
 				this.scrollbarActive = true;
 				this.scrollbarWrapper.show();
+				this.scrollContent.addClass('.with-scrollbar');
 				//init scrollbar size
 				var self = this;
 				setTimeout( function () { self._sizeScrollbar()} , 10 );//safari wants a timeout
@@ -193,6 +194,7 @@
 				if (this.scrollbarActive === true) {
 					this.scrollbarActive = false;
 					this.scrollbarWrapper.hide();
+					this.scrollContent.removeClass('.with-scrollbar');
 				}
 			}
 			// Size the content so there's space for the slider, or remove space for the slider

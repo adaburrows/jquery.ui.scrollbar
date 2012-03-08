@@ -54,6 +54,9 @@ needs to be called a certain way:
 $(".scroll-pane").data("scrollbar").resize();
 ```
 
+One day, all browsers may actually support a resize event for all elements and not
+just the window object.
+
 Changes you may need to make
 ----------------------------
 

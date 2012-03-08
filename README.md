@@ -32,6 +32,16 @@ Other options that can be set are:
 * ```easing``` - The easing function to use for the scrolling animation.
 * ```animationDuration``` - How long (in milliseconds) the animation will take for one unit (divided by distance).
 
+The default options are:
+```js
+options: {
+	orientation: "horizontal",
+	scrollFactor: 15,
+	easing: 'linear',
+	animationDuration: 20
+}
+```
+
 Methods
 -------
 

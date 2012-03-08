@@ -1,6 +1,11 @@
 jQuery UI Scrollbar
 ===================
 
+This is a simple scrollpane type component for jQuery UI. It is intended to be
+a general purpose component, used anytime you need a custom JS scrollbar in a
+jQuery UI environment. It is adapted out of frustration of turning the slider
+example of a horizontal scrollbar into a vertical scrollbar.
+
 Usage
 -----
 
@@ -27,8 +32,21 @@ Other options that can be set are:
 * ```easing``` - The easing function to use for the scrolling animation.
 * ```animationDuration``` - How long (in milliseconds) the animation will take for one unit (divided by distance).
 
+Methods
+-------
+
+If the content inside of the scrollbar changes in size, the .resize() method
+should be called. Since this component is written as a UI widget, this method
+needs to be called a certain way:
+
+```js
+$(".scroll-pane").data("scrollbar").resize();
+```
+
 Changes you may need to make
 ----------------------------
 
 The CSS has been modified to use greys, removing the color specifics will let
 it use your default jQuery UI theme.
+
+I may eventually factor the color scheme out of the othe necessary CSS.

@@ -57,10 +57,10 @@ $(".scroll-pane").data("scrollbar").resize();
 One day, all browsers may actually support a resize event for all elements and not
 just the window object.
 
-Changes you may need to make
-----------------------------
+Themes
+------
 
-The CSS has been modified to use greys, removing the color specifics will let
-it use your default jQuery UI theme.
+By default, the plugin will use your default jQuery UI theme.
 
-I may eventually factor the color scheme out of the othe necessary CSS.
+If you want to theme the plugin, there is an example of a theme in the
+```css/themes/greyshade.css``` file. This theme is used in the example.

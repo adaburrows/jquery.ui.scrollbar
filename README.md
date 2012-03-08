@@ -9,9 +9,11 @@ example of a horizontal scrollbar into a vertical scrollbar.
 Usage
 -----
 
-Using the plugin is simple. After you include jQuery, jQuery UI,
+Using the plugin is simple. Just include jQuery, jQuery UI,
 ```js/jquery.ui.scrollbar.js``` (or the minified version), and
-```css/jquery.ui.scrollbar.css``` just call:
+```css/jquery.ui.scrollbar.css```. If you want to use the mouse wheel handler,
+make sure you include [Brandon Aaron's mouse wheel jQuery plugin]
+(https://github.com/brandonaaron/jquery-mousewheel).
 
 ```js
 $(document).ready(function()

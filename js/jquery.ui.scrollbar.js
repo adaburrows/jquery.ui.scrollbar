@@ -19,6 +19,7 @@
  */
 
 (function ($) {
+	// Register the scrollbar widget.
 	$.widget("ui.scrollbar", {
 		options: {
 			orientation: "horizontal",
@@ -26,7 +27,9 @@
 			easing: 'linear',
 			animationDuration: 20
 		},
-		// Creatio Ex Nihilo
+		/**
+		 * Create the scrollpane out of nothing.
+ 		 */
 		_create: function () {
 			var
 				self	= this,
@@ -44,9 +47,11 @@
 			// Make scrollpane parts
 			this.scrollPane = $( '<div class="scroll-pane scroll-pane-'+ o.orientation + '"></div>' );
 			this.scrollContent	= $( '<div class="scroll-content scroll-content-' + o.orientation  + '"></div>' );
+
 			// Append children back into the container div.
 			this.scrollContent.append(this.containerChildren);
 			this.scrollContent.appendTo(this.scrollPane);
+			this.scrollContent.show();
 
 			// Build the main slider
 			this.scrollbarWrapper = $('<div class="scroll-bar-wrap scroll-bar-wrap-' + o.orientation + ' ui-corner-all"></div>');
@@ -70,6 +75,7 @@
 			// Append to the container
 			this.scrollPane.appendTo(this.containerElement);
 
+			// Handler for the mouse wheel
 			this.containerElement.bind('mousewheel', function(event, delta) {
 				if (self.scrollbarActive === true) {
 					event.stopPropagation();
@@ -80,8 +86,14 @@
 				}
 			});
 
+			// Show the scrollbar if needed (i.e.: content is large enough)
 			this._showScrollbar();
 		},
+
+		/**
+		 * Handle Helper: helps keep the scrollbar handle inside the scrollpane
+		 *   (the default behaviour is the slider handle extending into the margins)
+		 */
 		_makeHandleHelper: function () {
 			var self = this;
 			if(this.options.orientation == "horizontal") {
@@ -107,43 +119,59 @@
 			//change overflow to hidden now that slider handles the scrolling
 			this.scrollPane.css( "overflow", "hidden" );
 		},
+
+		/**
+		 * Horizontal scroll handler
+		 */
 		_horizontalScrollHandler: function (event, ui) {
 			this._scrollHorizontal(ui.value, this.options.animationDuration);
 		},
+
+		/**
+		 * Vertical scroll handler
+		 */
 		_verticalScrollHandler: function (event, ui) {
 			this._scrollVertical(ui.value, this.options.animationDuration);
 		},
+
+		/**
+		 * Mousewheel handler: handles computing scroll animation
+		 */
 		_mousewheelHandler: function (event, delta) {
 			var scrollScreen = false;
 			var duration = this.options.animationDuration;
 			var scrollAmount = delta * this.options.scrollFactor;
 			if(this.options.orientation == "horizontal") {
-				var scrollbarValue = parseInt(this.scrollbar.slider('value')) - scrollAmount;
-				if (scrollbarValue < 0) {
-					scrollbarValue = 0;
-					scrollScreen = true;
-				}
-				if (scrollbarValue > 100) {
-					scrollbarValue = 100;
-					scrollScreen = true;
-				}
-				this.scrollbar.slider('value', scrollbarValue);
-				this._scrollHorizontal(scrollbarValue, duration);
+				var scroll = this._adjustScrollAmount(-scrollAmount);
+				this._scrollHorizontal(scroll.amount, duration);
 			} else {
-				var scrollbarValue = parseInt(this.scrollbar.slider('value')) + scrollAmount;
-				if (scrollbarValue < 0) {
-					scrollbarValue = 0;
-					scrollScreen = true;
-				}
-				if (scrollbarValue > 100) {
-					scrollbarValue = 100;
-					scrollScreen = true;
-				}
-				this.scrollbar.slider('value', scrollbarValue);
-				this._scrollVertical(scrollbarValue, duration);
+				var scroll = this._adjustScrollAmount(scrollAmount);
+				this._scrollVertical(scroll.amount, duration);
 			}
-			return scrollScreen;
+			return scroll.scroll;
 		},
+
+		/**
+		 * Adjusts the scroll amount based on the bounds of the slider values
+		 */
+		_adjustScrollAmount: function (scrollAmount) {
+			var scrollScreen = false;
+			var scrollbarValue = parseInt(this.scrollbar.slider('value')) + scrollAmount;
+			if (scrollbarValue < 0) {
+				scrollbarValue = 0;
+				scrollScreen = true;
+			}
+			if (scrollbarValue > 100) {
+				scrollbarValue = 100;
+				scrollScreen = true;
+			}
+			this.scrollbar.slider('value', scrollbarValue);
+			return {amount: scrollbarValue, scroll: scrollScreen };
+		},
+
+		/**
+		 * Scrolls content horizontally
+		 */
 		_scrollHorizontal: function(scrollbarValue, duration) {
 			if ( this.scrollContent.width() > this.scrollPane.width() ) {
 				var distance = Math.round(
@@ -151,7 +179,7 @@
 				);
 				this.scrollContent.animate(
 					{
-						"margin-left":  + "px"
+						"margin-left":  distance + "px"
 					}, {
 						duration: duration/distance,
 						easing: this.options.easing
@@ -160,6 +188,10 @@
 				this.scrollContent.css( "margin-left", 0 );
 			}
 		},
+
+		/**
+		 * Scrolls content vertically
+		 */
 		_scrollVertical: function (scrollbarValue, duration) {
 			if ( this.scrollContent.height() > this.scrollPane.height() ) {
 				var distance = Math.round(
@@ -176,6 +208,10 @@
 				this.scrollContent.css( "margin-top", 0 );
 			}
 		},
+
+		/**
+		 * Shows the scrollbar when needed
+		 */
 		_showScrollbar: function () {
 			// Calculate offsets to determine if we need the scrollbar
 			var widthOffset = this.containerElement.width() - this.scrollContent.width();
@@ -186,7 +222,7 @@
 				// Set the active value to true so we know we've attached the scrollbar
 				this.scrollbarActive = true;
 				this.scrollbarWrapper.show();
-				this.scrollContent.addClass('.with-scrollbar');
+				this.scrollContent.addClass('with-scrollbar');
 				//init scrollbar size
 				var self = this;
 				setTimeout( function () { self._sizeScrollbar()} , 10 );//safari wants a timeout
@@ -200,9 +236,16 @@
 			// Size the content so there's space for the slider, or remove space for the slider
 			this._sizeContent();
 		},
+
+		/**
+		 * Resizes content based on the width of the vertical scrollbar
+		 * TODO: Give me feed back on resizing a horizontal slider.
+		 *       I think most designs will take that height in the design,
+		 *       but this could be more convenient.
+		 */
 		_sizeContent: function () {
 			if(this.options.orientation == "horizontal") {
-				// TODO: yeah, maybe I'll add this...
+				// TODO: yeah, maybe I'll add this... not strictly necessary
 			} else {
 				if (this.scrollbarActive === true) {
 					this.scrollContent.css("width", this.scrollPane.width() - (this.scrollbarWrapper.outerWidth(true)));
@@ -211,25 +254,20 @@
 				}
 			}
 		},
-		//size scrollbar and handle proportionally to scroll distance
+
+		/**
+		 * Size scrollbar and handle proportionally to content size
+		 */
 		_sizeScrollbar: function () {
 			if(this.options.orientation == "horizontal") {
-				var contentWidth = this.scrollContent.width();
-				var paneWidth = this.scrollPane.width();
-				var remainder = contentWidth - paneWidth;
-				var proportion = remainder / contentWidth;
-				var handleSize = paneWidth - ( proportion * paneWidth );
+				var handleSize = this._calcScrollBarSize(this.scrollContent.width(), this.scrollPane.width());
 				this.scrollbar.find( ".ui-slider-handle" ).css({
 					width: handleSize,
 					"margin-left": -handleSize / 2
 				});
 				this.handleHelper.width( "" ).width( this.scrollbar.width() - handleSize );
 			} else {
-				var contentHeight = this.scrollContent.height();
-				var paneHeight = this.scrollPane.height();
-				var remainder = contentHeight - paneHeight;
-				var proportion = remainder / contentHeight;
-				var handleSize = paneHeight - ( proportion * paneHeight );
+				var handleSize = this._calcScrollBarSize(this.scrollContent.height(), this.scrollPane.height());
 				this.scrollbar.find( ".ui-slider-handle" ).css({
 					height: handleSize,
 					"margin-top": -(handleSize / 2)
@@ -237,7 +275,20 @@
 				this.handleHelper.height( "" ).height( this.scrollbar.height() - handleSize ).css("margin-top", handleSize+'px');
 			}
 		},
-		//reset slider value based on scroll content position
+
+		/**
+		 * Calculation for handle size.
+		 */
+		_calcScrollBarSize: function (content, pane) {
+			var remainder = content - pane;
+			var proportion = remainder / content;
+			var handleSize = pane - ( proportion * pane );
+			return handleSize;
+		},
+
+		/**
+		 * Reset slider value based on scroll content position
+		 */
 		_resetValue: function () {
 			if(this.options.orientation == "horizontal"){
 				var remainder = this.scrollPane.width() - this.scrollContent.width();
@@ -253,7 +304,10 @@
 				this.scrollbar.slider( "value", 100 - percentage );
 			}
 		},
-		//if the slider is 100% and window gets larger, reveal content
+
+		/**
+		 * Reveal more content if the container gets larger
+		 */
 		_reflowContent: function () {
 			if(this.options.orientation == "horizontal"){
 				var showing = this.scrollContent.width() + parseInt( this.scrollContent.css( "margin-left" ), 10 );
@@ -269,7 +323,10 @@
 				}
 			}
 		},
-		//change handle position on content resize
+
+		/**
+		 * Take care of all the cares that come with resizng the content or container
+		 */
 		resize: function () {
 			this._showScrollbar();
 			if(this.scrollbarActive) {
@@ -277,14 +334,23 @@
 				this._reflowContent();
 			}
 		},
-		// Ex Ante, Nihilo
-		destroy: function () {
-			// TODO: yeah, maybe...
-		},
-		// Allow setting options after initialization
-		_setOption: function (option, value) {
-			$.Widget.prototype._setOption.apply(this, arguments);
 
+		/**
+		 * Restore the DOM to what it was before using the scrollbar
+		 */
+		destroy: function () {
+			this.containerChildren.detach();
+			this.containerElement.empty();
+			this.containerElement.append(this.containerChildren);
+		},
+
+		/**
+		 * Allow setting options after initialization
+		 */
+		_setOption: function (option, value) {
+			// Apply default behaviour
+			$.Widget.prototype._setOption.apply(this, arguments);
+			// Apply specific behaviour
 			switch(option) {
 				case 'contentHeight':
 					this.scrollContent.css("height", value);

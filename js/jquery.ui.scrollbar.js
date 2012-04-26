@@ -170,43 +170,61 @@
 		},
 
 		/**
-		 * Scrolls content horizontally
+		 * Scrolls content horizontally by percentage
 		 */
 		_scrollHorizontal: function(scrollbarValue, duration) {
 			if ( this.scrollContent.width() > this.scrollPane.width() ) {
 				var distance = Math.round(
 					scrollbarValue / 100 * ( this.scrollPane.width() - this.scrollContent.width() )
 				);
-				this.scrollContent.animate(
-					{
-						"margin-left":  distance + "px"
-					}, {
-						duration: duration/distance,
-						easing: this.options.easing
-					});
+				this._scrollHorizontalDistance(distance, duration);
 			} else {
 				this.scrollContent.css( "margin-left", 0 );
 			}
 		},
 
 		/**
-		 * Scrolls content vertically
+		 * Scrolls content vertically by percentage
 		 */
 		_scrollVertical: function (scrollbarValue, duration) {
 			if ( this.scrollContent.height() > this.scrollPane.height() ) {
 				var distance = Math.round(
 					(100 - scrollbarValue) / 100 * ( this.scrollPane.height() - this.scrollContent.height() )
 				);
-				this.scrollContent.animate(
-					{
-						"margin-top": distance + "px"
-					}, {
-						duration: duration/distance,
-						easing: this.options.easing
-					});
+				this._scrollVerticalDistance(distance, duration);
 			} else {
 				this.scrollContent.css( "margin-top", 0 );
 			}
+		},
+
+		/**
+		 * Scrolls content horizontally by a certain distance
+		 * @param distance
+		 * @param duration
+		 */
+		_scrollHorizontalDistance: function (distance, duration) {
+			this.scrollContent.animate(
+				{
+					"margin-left":  distance + "px"
+				}, {
+					duration: duration/distance,
+					easing: this.options.easing
+				});
+		},
+
+		/**
+		 * Scrolls content vertically by a certain distance
+		 * @param distance
+		 * @param duration
+		 */
+		_scrollVerticalDistance: function (distance, duration) {
+			this.scrollContent.animate(
+				{
+					"margin-top": distance + "px"
+				}, {
+					duration: duration/distance,
+					easing: this.options.easing
+				});
 		},
 
 		/**
@@ -333,6 +351,36 @@
 				this._resetValue();
 				this._reflowContent();
 			}
+		},
+
+		/**
+		 * Scroll to a particular offset
+		 */
+		scrollToOffset: function (offset) {
+			if(this.options.orientation == "horizontal") {
+				// Calculate how much content is outside of the view
+				var distance = this.calcDistanceToOffset( offset, this.scrollContent.width(), this.containerElement.width());
+				this._scrollHorizontalDistance(distance, this.options.animationDuration);
+			} else {
+				// Calculate how much content is outside of the view
+				var distance = this.calcDistanceToOffset( offset, this.scrollContent.height(), this.containerElement.height());
+				this._scrollVerticalDistance(distance, this.options.animationDuration);
+			}
+		},
+
+		/**
+		 *
+		 * @param viewSize
+		 * @param contentSize
+		 */
+		calcDistanceToOffset: function (distance, contentSize, viewSize) {
+			var contentRemainder = contentSize - distance;
+			var remainder = viewSize - contentRemainder;
+			var actualDistance = distance;
+			if ( remainder < 0 ) {
+				actualDistance = distance + remainder;
+			}
+			return actualDistance;
 		},
 
 		/**
